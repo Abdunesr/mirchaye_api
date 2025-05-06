@@ -12,12 +12,19 @@ class PoliticalParty extends Model
     protected $fillable = [
         'user_id',
         'party_name',
-        'abbreviation',
-        'description',
-        'logo',
-        'website',
-        'founding_date',
-        'headquarters'
+        'party_acronym',
+        'registration_number',
+        'certificate_url',
+        'logo_url',
+        'president_name',
+        'president_photo_url',
+        'contact_phone',
+        'contact_email',
+        'headquarters_address',
+        'facebook_url',
+        'twitter_url',
+        'founded_year',
+        'slogan',
     ];
 
     public function user()

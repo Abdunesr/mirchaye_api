@@ -14,13 +14,19 @@ return new class extends Migration
         Schema::create('political_parties', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('party_name');
-            $table->string('abbreviation');
-            $table->text('description')->nullable();
-            $table->string('logo')->nullable();
-            $table->string('website')->nullable();
-            $table->string('founding_date')->nullable();
-            $table->string('headquarters')->nullable();
+      $table->string('party_name')->unique();
+            $table->string('party_acronym')->unique();
+            $table->string('registration_number')->unique();
+            $table->string('president_name');
+            $table->string('contact_phone')->nullable();
+            $table->text('headquarters_address')->nullable();
+            $table->integer('founded_year')->nullable();
+            $table->string('certificate_url')->nullable();
+            $table->string('logo_url')->nullable();
+            $table->string('slogan')->nullable();
+            $table->string('facebook_url')->nullable();
+            $table->string('twitter_url')->nullable();
+            $table->string('president_photo_url')->nullable();
             $table->timestamps();
         });
     }
