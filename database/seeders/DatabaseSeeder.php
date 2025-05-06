@@ -2,22 +2,22 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    public function run()
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Create NEBE admin account
+        User::create([
+            'name' => 'NEBE Admin',
+            'email' => 'nebe@admin.com',
+            'password' => bcrypt('admin123'), // Change this in production!
+            'type' => 'nebe',
+            'is_approved' => true
         ]);
+
+        // You can add more seeders here if needed
     }
 }
