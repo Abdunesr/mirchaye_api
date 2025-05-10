@@ -16,7 +16,9 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'party_name' => 'required|string|max:255',
-            'abbreviation' => 'required|string|max:10',
+            'registration_number'=>'required|string|max:255',
+            'president_name'=>'required|string|max:255',
+            'party_acronym'=>'required|string|max:255',   
         ]);
 
         $user = User::create([
@@ -29,8 +31,10 @@ class AuthController extends Controller
 
         $user->politicalParty()->create([
             'party_name' => $request->party_name,
-            'abbreviation' => $request->abbreviation,
+            'party_acronym' => $request->party_acronym,
             'description' => $request->description,
+            'president_name' => $request->president_name,
+            'registration_number' => $request->registration_number,
         ]);
 
         return response()->json([
