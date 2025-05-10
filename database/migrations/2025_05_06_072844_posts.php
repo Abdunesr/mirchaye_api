@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->enum('post_type', ['campaign', 'news', 'event', 'policy'])->default('news');
-            $table->string('image_url')->nullable();
-            $table->string('video_url')->nullable();
+      
+                $table->string('image')->nullable();
             $table->timestamps();
         });
     }

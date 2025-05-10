@@ -20,6 +20,7 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'post_type' => 'required|in:campaign,news,event,policy',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
 
             'attachments' => 'nullable|array',
@@ -31,6 +32,7 @@ class PostController extends Controller
             'user_id' => auth()->id(),
             'title' => $request->title,
             'content' => $request->content,
+            'post_type' => $request->post_type,
         ];
 
         if ($request->hasFile('image')) {

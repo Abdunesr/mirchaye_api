@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::put('/party/profile', [PartyController::class, 'updateProfile']);
 
    
-    Route::post('/posts', [PostController::class, 'store']);
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::put('/posts/{post}', [PostController::class, 'update']);
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
     
