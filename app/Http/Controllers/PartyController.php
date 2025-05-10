@@ -109,4 +109,5 @@ class PartyController extends Controller
             'party' => $party,
         ]);
     }
+
 }

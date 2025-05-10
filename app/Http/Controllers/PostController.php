@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Attachment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,7 +11,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('user.politicalParty')->latest()->get();
+        $posts = Post::with(['user.politicalParty', 'attachments'])->latest()->get();
         return response()->json($posts);
     }
 
@@ -20,6 +21,10 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+            'attachments' => 'nullable|array',
+            'attachments.*.file_url' => 'required|url',
+            'attachments.*.file_type' => 'required|in:image,video,pdf',
         ]);
 
         $data = [
@@ -34,12 +39,19 @@ class PostController extends Controller
 
         $post = Post::create($data);
 
-        return response()->json($post, 201);
+        foreach ($request->attachments ?? [] as $attachment) {
+            $post->attachments()->create([
+                'file_url' => $attachment['file_url'],
+                'file_type' => $attachment['file_type'],
+            ]);
+        }
+
+        return response()->json($post->load(['attachments']), 201);
     }
 
     public function show(Post $post)
     {
-        return response()->json($post->load('user.politicalParty'));
+        return response()->json($post->load(['user.politicalParty', 'attachments']));
     }
 
     public function update(Request $request, Post $post)
@@ -57,7 +69,6 @@ class PostController extends Controller
         $data = $request->only(['title', 'content']);
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
             }
@@ -66,7 +77,7 @@ class PostController extends Controller
 
         $post->update($data);
 
-        return response()->json($post);
+        return response()->json($post->load(['attachments']));
     }
 
     public function destroy(Post $post)
@@ -79,6 +90,7 @@ class PostController extends Controller
             Storage::disk('public')->delete($post->image);
         }
 
+        $post->attachments()->delete();
         $post->delete();
 
         return response()->json(['message' => 'Post deleted successfully']);
