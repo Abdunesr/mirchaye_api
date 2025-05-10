@@ -77,7 +77,10 @@
                 <label for="image" class="form-label">Post Image (Optional)</label>
                 <input type="file" class="form-control" id="image" name="image" accept="image/*">
             </div>
-
+<div class="mb-3">
+    <label for="pdf_file" class="form-label">PDF File (Optional)</label>
+    <input type="file" class="form-control" id="pdf_file" name="pdf_file" accept=".pdf">
+</div>
             <!-- Attachments (Dynamic Fields) -->
             <div class="mb-3">
                 <label class="form-label">Attachments (Optional)</label>

@@ -22,6 +22,7 @@ class PostController extends Controller
             'content' => 'required|string',
             'post_type' => 'required|in:campaign,news,event,policy',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                  'pdf_file' => 'nullable|file|mimes:pdf|max:5120',
 
             'attachments' => 'nullable|array',
             'attachments.*.file_url' => 'required|url',
@@ -38,7 +39,11 @@ class PostController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('posts', 'public');
         }
-
+  // Add PDF file handling
+   if ($request->hasFile('pdf_file')) {
+        $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
+        $data['pdf_file'] = $pdfPath; 
+    }
         $post = Post::create($data);
 
         foreach ($request->attachments ?? [] as $attachment) {
