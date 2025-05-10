@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('post_type', ['campaign', 'news', 'event', 'policy'])->default('news');
       
                 $table->string('image')->nullable();
+                $table->string('pdf_file')->nullable()->after('image');
             $table->timestamps();
         });
     }
