@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,8 +72,7 @@
                     <option value="policy">Policy</option>
                 </select>
             </div>
-
-            <!-- Image Upload -->
+<!-- Image Upload -->
             <div class="mb-3">
                 <label for="image" class="form-label">Post Image (Optional)</label>
                 <input type="file" class="form-control" id="image" name="image" accept="image/*">
@@ -152,8 +152,7 @@
             container.insertAdjacentHTML('beforeend', newAttachment);
             attachmentCounter++;
         }
-
-        // Remove attachment field
+// Remove attachment field
         function removeAttachment(button) {
             button.closest('.attachment-group').remove();
         }
@@ -206,7 +205,7 @@
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
-                        'Authorization': `Bearer ${getAuthToken()}`
+                        'Authorization': Bearer ${getAuthToken()}
                     }
                 });
                 
