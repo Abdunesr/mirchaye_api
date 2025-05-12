@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\PoliticalParty;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,9 +59,6 @@ class PartyController extends Controller
         return response()->json($parties);
     }
 
-    // -------------------------------
-    // 🎯 Party Profile Management
-    // -------------------------------
 
     public function showProfile()
     {
@@ -75,39 +73,75 @@ class PartyController extends Controller
         return response()->json($party);
     }
 
-    public function updateProfile(Request $request)
-    {
-        $user = Auth::user();
-
-        $party = PoliticalParty::where('user_id', $user->id)->first();
-
-        if (!$party) {
-            return response()->json(['message' => 'Party profile not found.'], 404);
-        }
-
-        $validated = $request->validate([
-            'party_name' => 'string|max:255',
-            'party_acronym' => 'string|max:50',
-            'registration_number' => 'string|max:100',
-            'certificate_url' => 'url|nullable',
-            'logo_url' => 'url|nullable',
-            'president_name' => 'string|max:255',
-            'president_photo_url' => 'url|nullable',
-            'contact_phone' => 'string|max:20',
-            'contact_email' => 'email|max:255',
-            'headquarters_address' => 'string|max:255',
-            'facebook_url' => 'url|nullable',
-            'twitter_url' => 'url|nullable',
-            'founded_year' => 'integer|nullable',
-            'slogan' => 'string|nullable|max:255',
-        ]);
-
-        $party->update($validated);
-
+  public function updateProfile(Request $request)
+{
+    // First verify request content
+    if (empty($request->all())) {
         return response()->json([
-            'message' => 'Profile updated successfully',
-            'party' => $party,
-        ]);
+            'error' => 'Empty request data',
+            'headers_received' => $request->headers->all(),
+            'content_type' => $request->headers->get('Content-Type')
+        ], 400);
     }
 
+    $user = Auth::user();
+    $party = PoliticalParty::where('user_id', $user->id)->firstOrFail();
+
+    // Validate
+    $validated = $request->validate([
+        'party_name' => 'sometimes|string|max:255',
+        // ... [keep all your other validation rules]
+    ]);
+
+    // Handle updates
+    $updateData = [];
+
+    // Text fields
+    foreach ([
+        'party_name',
+        'party_acronym',
+        'registration_number',
+        'president_name',
+        'contact_phone',
+        'contact_email',
+        'headquarters_address',
+        'facebook_url',
+        'twitter_url',
+        'founded_year',
+        'slogan'
+    ] as $field) {
+        if ($request->has($field)) {
+            $updateData[$field] = $validated[$field];
+        }
+    }
+
+    // File handling
+    $fileFields = [
+        'certificate' => 'certificate_url',
+        'logo' => 'logo_url',
+        'president_photo' => 'president_photo_url'
+    ];
+
+    foreach ($fileFields as $requestField => $dbField) {
+        if ($request->hasFile($requestField)) {
+            // Delete old file
+            if ($party->{$dbField}) {
+                Storage::disk('public')->delete($party->{$dbField});
+            }
+            // Store new file
+            $updateData[$dbField] = $request->file($requestField)->store(
+                "party/{$requestField}s", 
+                'public'
+            );
+        }
+    }
+
+    $party->update($updateData);
+
+    return response()->json([
+        'message' => 'Profile updated successfully',
+        'data' => $updateData, // Include what was actually updated
+        'party' => $party->fresh()
+    ]);
+}
 }
