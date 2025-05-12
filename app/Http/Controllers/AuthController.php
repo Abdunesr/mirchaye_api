@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\PoliticalParty;
 use App\Models\User;
-use DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
