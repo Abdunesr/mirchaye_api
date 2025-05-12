@@ -129,10 +129,16 @@ class PartyController extends Controller
                 Storage::disk('public')->delete($party->{$dbField});
             }
             // Store new file
-            $updateData[$dbField] = $request->file($requestField)->store(
-                "party/{$requestField}s", 
-                'public'
-            );
+            $file = $request->file($requestField);
+            if ($file && !is_array($file) && $file->isValid()) {
+                $file = $request->file($requestField);
+                if ($file && !is_array($file) && $file->isValid()) {
+                    $updateData[$dbField] = $file->store(
+                        "party/{$requestField}s", 
+                        'public'
+                    );
+                }
+            }
         }
     }
 
