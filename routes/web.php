@@ -11,7 +11,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/register', function () {
-    return view('auth.login');
+    return view('auth.register');
 })->name('register');
 
 Route::get('/registers', function () {
