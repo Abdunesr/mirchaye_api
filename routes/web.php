@@ -17,3 +17,14 @@ Route::get('/register', function () {
 Route::get('/registers', function () {
     return view('auth.login');
 })->name('password.request');
+
+Route::get('/password/reset', function () {
+    return view('auth.passwords.email');
+})->name('password.request');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+// View profile link
+Route::get('/dashboard/profile', function () {
+    return view('profile'); // Assuming you save the blade file as profile.blade.php
+}); // Add any middleware you need
