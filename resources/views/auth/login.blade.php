@@ -6,7 +6,7 @@
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome back</h1>
-                <p class="text-gray-600">Log in to your ምርጫዬ account</p>
+                <p class="text-gray-600">Login to your ምርጫዬ account</p>
             </div>
 
             <div id="error-message" class="hidden rounded-md bg-red-50 p-4 mb-6 text-red-800 text-sm font-medium"></div>
