@@ -28,3 +28,8 @@ Route::get('/dashboard', function () {
 Route::get('/dashboard/profile', function () {
     return view('profile'); // Assuming you save the blade file as profile.blade.php
 }); // Add any middleware you need
+
+// Authenticated Routes (NEBE and approved parties only)
+ Route::get('/posts/create', function () {
+    return view('posts.create'); // Assuming you save the blade file as profile.blade.php
+ })->name('posts.create'); 
